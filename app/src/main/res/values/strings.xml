@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Desafio Sicoob</string>
+    <string name="drawer_open">Abrir Menu Lateral</string>
+    <string name="drawer_close">Fechar Menu Lateral</string>
+
+
+    <string name="favoritos">Favoritos</string>
+    <string name="sobreApp">Sobre o App</string>
+    <string name="futuros">Futuros</string>
+    <string name="nos_cinemas">Nos Cinemas</string>
+    <string name="popular">Populares</string>
+
+
+
+
+
+    <string name="dev_name">Túlio de Carvalho Matias</string>
+    <string name="dev_email">matiastulio@gmail.com</string>
+
+
+
+    <dimen name="card_width_size">185dp</dimen>
+    <dimen name="card_height_size">280dp</dimen>
+    <dimen name="star_size">36dp</dimen>
+
+
+    <string name="api_key">5018bbf0befefabea1023d085086c259</string>
+    <string name="base_path">https://api.themoviedb.org/3/movie/</string>
+    <string name="default_language">pt-BR</string>
+</resources>
