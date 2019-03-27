@@ -27,7 +27,7 @@
                 android:layout_height="@dimen/card_height_size"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/marvel" />
+                android:src="@drawable/placeholder" />
 
             <!--<ImageView-->
                 <!--android:id="@+id/item_star"-->

@@ -1,6 +1,8 @@
 package br.com.tuliomatias.desafiosicoob.models;
 
 
+import android.graphics.Bitmap;
+
 import com.google.gson.annotations.SerializedName;
 
 import lombok.Builder;
@@ -47,5 +49,7 @@ public class Filme {
 
     @SerializedName("release_date")
     private String dataLancamento;
+
+    private Bitmap image;
 
 }

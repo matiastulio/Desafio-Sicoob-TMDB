@@ -44,11 +44,11 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
         filmes = new ArrayList<>();
         api = new ApiTmdb(Tmdb.builder()
                         .numeroPaginaAtual(1)
-                        .lingua(getResources()
-                        .getString(R.string.default_language))
-                        .apiKey(getResources()
-                        .getString(R.string.api_key))
+                        .lingua(getResources().getString(R.string.default_language))
+                        .apiKey(getResources().getString(R.string.api_key))
                         .baseRequestPath(getResources().getString(R.string.base_path))
+                        .baseImageRequestPath(getResources().getString(R.string.default_image_path))
+                        .imageSize(getResources().getString(R.string.default_image_size))
                         .build(),this);
 
         int qtdColunas = getResources().getInteger(R.integer.qtd_colunas);
@@ -92,11 +92,11 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
 
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
     public void onMessageEvent(final MessageEvent event){
-        if(event.dto == null){
+        if(!event.isImageUpdated){
             this.filmes.addAll(event.filmes);
             adapter.notifyDataSetChanged();
         }else{
-
+            adapter.notifyDataSetChanged();
         }
     }
 }

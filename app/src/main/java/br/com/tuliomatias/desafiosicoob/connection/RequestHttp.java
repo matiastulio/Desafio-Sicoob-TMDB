@@ -1,13 +1,19 @@
 package br.com.tuliomatias.desafiosicoob.connection;
 
+
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.HttpUrl;
-import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 
+import br.com.tuliomatias.desafiosicoob.R;
+import br.com.tuliomatias.desafiosicoob.models.Filme;
+import br.com.tuliomatias.desafiosicoob.models.MessageEvent;
 import br.com.tuliomatias.desafiosicoob.models.Tmdb;
 
 public class RequestHttp implements Callback {
@@ -39,8 +45,17 @@ public class RequestHttp implements Callback {
 
     }
 
-    public void requestImage(String relativeUrl){
-        //TODO
+    public void requestImage(Filme f){
+        try {
+            f.setImage(Picasso.get()
+                    .load(config.getBaseImageRequestPath()+config.getImageSize()+f.getImagePath())
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.error)
+                    .get());
+            EventBus.getDefault().post(new MessageEvent(true,null));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 import br.com.tuliomatias.desafiosicoob.R;
 import br.com.tuliomatias.desafiosicoob.models.Filme;
-import butterknife.BindView;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +19,7 @@ import lombok.Setter;
 public class FilmesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
-    protected ArrayList<Filme> filmes;
+    private ArrayList<Filme> filmes;
 
     public FilmesAdapter(ArrayList<Filme> filmes) {
         this.filmes = filmes;
@@ -42,7 +41,7 @@ public class FilmesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         Filme f = filmes.get(position);
         FilmeHolder filmeHolder = (FilmeHolder) holder;
 
-        //TODO colocar aqui a imagem do filme
+        filmeHolder.getImagem().setImageBitmap(f.getImage());
         filmeHolder.getTitulo().setText(f.getTitulo());
     }
 
@@ -62,8 +61,8 @@ public class FilmesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public FilmeHolder(View itemView) {
             super(itemView);
 
-            //TODO colocar aqui a imagem do filme
             titulo = (TextView) itemView.findViewById(R.id.item_titulo);
+            imagem = (ImageView) itemView.findViewById(R.id.item_imagem);
         }
     }
 }

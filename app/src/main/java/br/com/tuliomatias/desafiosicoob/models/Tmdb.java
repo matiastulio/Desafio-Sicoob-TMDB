@@ -11,4 +11,6 @@ public class Tmdb {
     private String lingua;
     private String apiKey;
     private String baseRequestPath;
+    private String baseImageRequestPath;
+    private String imageSize;
 }

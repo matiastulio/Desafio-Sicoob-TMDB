@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 
 import br.com.tuliomatias.desafiosicoob.connection.ICallbackFromRequest;
 import br.com.tuliomatias.desafiosicoob.connection.RequestHttp;
@@ -32,7 +31,8 @@ public class ApiTmdb implements IApiTmdb, ICallbackFromRequest {
     }
 
     @Override
-    public void getImageFromPath(String relativePath) {
+    public void getImageFromPath(Filme f) {
+        carregador.requestImage(f);
     }
 
     @Override
@@ -45,7 +45,11 @@ public class ApiTmdb implements IApiTmdb, ICallbackFromRequest {
 
         Pagina p = gson.fromJson(corpoResposta, Pagina.class);
 
-        EventBus.getDefault().post(new MessageEvent(null,p.getFilmes()));
+        EventBus.getDefault().post(new MessageEvent(false,p.getFilmes()));
+
+        for(Filme f: p.getFilmes()){
+            getImageFromPath(f);
+        }
     }
 
     private void getListaFromPath(String relativeUrl){
