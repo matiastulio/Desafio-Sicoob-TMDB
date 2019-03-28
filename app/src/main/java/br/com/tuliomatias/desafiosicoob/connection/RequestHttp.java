@@ -60,6 +60,18 @@ public class RequestHttp implements Callback {
         }
     }
 
+    public void requestMovie(int filmeId){
+
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(config.getBaseRequestPath()+filmeId).newBuilder();
+        urlBuilder.addQueryParameter(API_KEY,config.getApiKey());
+        urlBuilder.addQueryParameter(LANGUAGE,config.getLingua());
+
+
+        Request request = new Request.Builder().url(urlBuilder.build().toString()).build();
+        OkHttpClientSingleton.getInstance().getClient().newCall(request).enqueue(this);
+
+    }
+
     @Override
     public void onFailure(Request request, IOException e) {
 

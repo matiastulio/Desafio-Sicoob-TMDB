@@ -1,9 +1,6 @@
 package br.com.tuliomatias.desafiosicoob.fragments;
 
-import java.util.ArrayList;
-
 import br.com.tuliomatias.desafiosicoob.R;
-import br.com.tuliomatias.desafiosicoob.models.Filme;
 
 public class PopularesFragment extends AbstractListFragment {
 

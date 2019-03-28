@@ -16,7 +16,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
-import br.com.tuliomatias.desafiosicoob.FilmeDetail;
+import br.com.tuliomatias.desafiosicoob.FilmeDetailActivity;
 import br.com.tuliomatias.desafiosicoob.adapters.FilmesAdapter;
 import br.com.tuliomatias.desafiosicoob.models.Filme;
 import br.com.tuliomatias.desafiosicoob.R;
@@ -96,9 +96,9 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
     public void onClick(View v, int position) {
         Filme f = filmes.get(position);
         Log.d(TAG, "onItemClick position: " + position+" filme: " + f.getTitulo());
-        Intent intent = new Intent(getActivity(), FilmeDetail.class);
+        Intent intent = new Intent(getActivity(), FilmeDetailActivity.class);
+        intent.putExtra(FilmeDetailActivity.FILME_ID,f.getId());
 
-        EventBus.getDefault().postSticky(new FilmeMessageEvent(f));
         getActivity().startActivity(intent);
 
     }

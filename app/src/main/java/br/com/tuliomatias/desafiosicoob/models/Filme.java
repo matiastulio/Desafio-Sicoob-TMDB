@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -51,5 +53,10 @@ public class Filme {
     private String dataLancamento;
 
     private Bitmap image;
+
+    private String budget;
+    private ArrayList<Genero> genres;
+    private int runtime;
+    private int revenue;
 
 }

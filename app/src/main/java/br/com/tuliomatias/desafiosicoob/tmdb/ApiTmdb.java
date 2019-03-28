@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import br.com.tuliomatias.desafiosicoob.connection.ICallbackFromRequest;
 import br.com.tuliomatias.desafiosicoob.connection.RequestHttp;
 import br.com.tuliomatias.desafiosicoob.models.Filme;
+import br.com.tuliomatias.desafiosicoob.models.FilmeMessageEvent;
 import br.com.tuliomatias.desafiosicoob.models.ApiMessageEvent;
 import br.com.tuliomatias.desafiosicoob.models.Pagina;
 import br.com.tuliomatias.desafiosicoob.models.Tmdb;
@@ -38,7 +39,8 @@ public class ApiTmdb implements IApiTmdb, ICallbackFromRequest {
     }
 
     @Override
-    public void getFilme() {
+    public void getFilme(int filmeId) {
+        carregador.requestMovie(filmeId);
     }
 
     @Override
@@ -46,15 +48,21 @@ public class ApiTmdb implements IApiTmdb, ICallbackFromRequest {
         Gson gson = new GsonBuilder().create();
 
         Pagina p = gson.fromJson(corpoResposta, Pagina.class);
-        config.setNumeroPaginaAtual(config.getNumeroPaginaAtual()+1);
+        if(p.getFilmes() != null){// é uma lista de filmes
+            config.setNumeroPaginaAtual(config.getNumeroPaginaAtual()+1);
 
-        ArrayList<Filme> filmes = p.getFilmes();
+            ArrayList<Filme> filmes = p.getFilmes();
 
-        EventBus.getDefault().post(new ApiMessageEvent(false,filmes));
+            EventBus.getDefault().post(new ApiMessageEvent(false, filmes));
 
-        for(Filme f: filmes){
-            getImageFromPath(f);
+            for(Filme f: filmes){
+                getImageFromPath(f);
+            }
+        }else{// é um filme unico
+            Filme f = gson.fromJson(corpoResposta, Filme.class);
+            EventBus.getDefault().post(new FilmeMessageEvent(f));
         }
+
     }
 
     private void getListaFromPath(String relativeUrl){
