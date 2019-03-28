@@ -13,4 +13,9 @@ public class PopularesFragment extends AbstractListFragment {
     public String titulo() {
         return getResources().getString(R.string.popular);
     }
+
+    @Override
+    public boolean isStoredData() {
+        return false;
+    }
 }

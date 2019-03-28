@@ -1,5 +1,7 @@
 package br.com.tuliomatias.desafiosicoob.tmdb;
 
+import android.app.Application;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -7,9 +9,12 @@ import org.greenrobot.eventbus.EventBus;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.tuliomatias.desafiosicoob.connection.ICallbackFromRequest;
 import br.com.tuliomatias.desafiosicoob.connection.RequestHttp;
+import br.com.tuliomatias.desafiosicoob.database.FilmesDao;
+import br.com.tuliomatias.desafiosicoob.database.FilmesRoomDatabase;
 import br.com.tuliomatias.desafiosicoob.models.Filme;
 import br.com.tuliomatias.desafiosicoob.models.FilmeMessageEvent;
 import br.com.tuliomatias.desafiosicoob.models.ApiMessageEvent;
@@ -21,8 +26,11 @@ public class ApiTmdb implements IApiTmdb, ICallbackFromRequest {
     private Tmdb config;
     private RequestHttp carregador;
     private IRespostaDaApiTmdb solicitante;
+    private FilmesDao dao;
 
-    public ApiTmdb(Tmdb config,IRespostaDaApiTmdb solicitante) {
+    public ApiTmdb(Application app, Tmdb config, IRespostaDaApiTmdb solicitante) {
+        FilmesRoomDatabase db = FilmesRoomDatabase.getDatabase(app);
+        dao = db.filmesDao();
         this.config = config;
         carregador = new RequestHttp(this);
         this.solicitante = solicitante;
@@ -30,7 +38,20 @@ public class ApiTmdb implements IApiTmdb, ICallbackFromRequest {
 
     @Override
     public void getFilmes() {
-        getListaFromPath(solicitante.getPathPesquisa());
+        if(!config.isStoredData())
+            getListaFromPath(solicitante.getPathPesquisa());
+        else{
+            Thread t;
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    List<Filme> filmes = dao.getAllWords();
+                    EventBus.getDefault().post(new ApiMessageEvent(false, (ArrayList<Filme>) filmes));
+                }
+            };
+            t = new Thread(r);
+            t.start();
+        }
     }
 
     @Override

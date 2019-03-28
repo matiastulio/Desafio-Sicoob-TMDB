@@ -13,4 +13,9 @@ public class FuturosFragment extends AbstractListFragment {
     public String titulo() {
         return getResources().getString(R.string.futuros);
     }
+
+    @Override
+    public boolean isStoredData() {
+        return false;
+    }
 }

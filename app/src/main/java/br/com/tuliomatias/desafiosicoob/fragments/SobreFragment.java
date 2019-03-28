@@ -15,4 +15,9 @@ public class SobreFragment extends AbstractListFragment {
     public String titulo() {
         return getResources().getString(R.string.sobreApp);
     }
+
+    @Override
+    public boolean isStoredData() {
+        return false;
+    }
 }

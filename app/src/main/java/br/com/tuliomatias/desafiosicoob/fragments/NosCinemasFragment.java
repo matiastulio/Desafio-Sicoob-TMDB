@@ -13,4 +13,9 @@ public class NosCinemasFragment extends AbstractListFragment {
     public String titulo() {
         return getResources().getString(R.string.nos_cinemas);
     }
+
+    @Override
+    public boolean isStoredData() {
+        return false;
+    }
 }

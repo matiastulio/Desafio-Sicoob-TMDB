@@ -71,7 +71,8 @@ public class FilmeDetailActivity extends AppCompatActivity implements IRespostaD
         setContentView(R.layout.activity_filme_detail);
         ButterKnife.bind(this);
 
-        api = new ApiTmdb(Tmdb.builder()
+        api = new ApiTmdb(getApplication(),
+                Tmdb.builder()
                 .numeroPaginaAtual(1)
                 .lingua(getResources().getString(R.string.default_language))
                 .apiKey(getResources().getString(R.string.api_key))
@@ -79,6 +80,7 @@ public class FilmeDetailActivity extends AppCompatActivity implements IRespostaD
                 .baseImageRequestPath(getResources().getString(R.string.default_image_path))
                 .imageSize(getResources().getString(R.string.default_image_size))
                 .regiao(getResources().getString(R.string.regiao))
+                .isStoredData(false)
                 .build(),this);
 
         Intent intent = getIntent();

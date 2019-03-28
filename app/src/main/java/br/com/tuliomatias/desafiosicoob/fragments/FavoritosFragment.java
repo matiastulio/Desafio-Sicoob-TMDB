@@ -13,4 +13,9 @@ public class FavoritosFragment extends AbstractListFragment {
     public String titulo() {
         return getResources().getString(R.string.favoritos);
     }
+
+    @Override
+    public boolean isStoredData() {
+        return true;
+    }
 }

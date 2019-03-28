@@ -31,6 +31,7 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
 
     public abstract String getListPath();
     public abstract String titulo();
+    public abstract boolean isStoredData();
 
     protected ArrayList<Filme> filmes;
 
@@ -48,8 +49,10 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
 
         getActivity().setTitle(titulo());
 
+        getActivity().getApplication();
         filmes = new ArrayList<>();
-        api = new ApiTmdb(Tmdb.builder()
+        api = new ApiTmdb(getActivity().getApplication(),
+                        Tmdb.builder()
                         .numeroPaginaAtual(1)
                         .lingua(getResources().getString(R.string.default_language))
                         .apiKey(getResources().getString(R.string.api_key))
@@ -57,6 +60,7 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
                         .baseImageRequestPath(getResources().getString(R.string.default_image_path))
                         .imageSize(getResources().getString(R.string.default_image_size))
                         .regiao(getResources().getString(R.string.regiao))
+                        .isStoredData(isStoredData())
                         .build(),this);
 
         int qtdColunas = getResources().getInteger(R.integer.qtd_colunas);
