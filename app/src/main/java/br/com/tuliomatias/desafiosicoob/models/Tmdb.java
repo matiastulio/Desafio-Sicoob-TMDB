@@ -13,4 +13,5 @@ public class Tmdb {
     private String baseRequestPath;
     private String baseImageRequestPath;
     private String imageSize;
+    private String regiao;
 }

@@ -27,20 +27,20 @@
                 android:layout_height="@dimen/card_height_size"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/placeholder" />
+                android:src="@drawable/placeholder"
+                android:foreground="@drawable/image_gradient"/>
 
             <TextView
                 android:id="@+id/item_titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@id/item_imagem"
-                android:layout_alignLeft="@id/item_imagem"
                 android:layout_alignBottom="@id/item_imagem"
                 android:layout_margin="1dp"
                 android:maxWidth="200sp"
                 android:maxLines="3"
                 android:paddingBottom="10dp"
-                android:paddingLeft="12dp"
+                android:paddingEnd="10dp"
                 android:paddingStart="12dp"
                 android:textColor="#fff"
                 android:textSize="16sp"

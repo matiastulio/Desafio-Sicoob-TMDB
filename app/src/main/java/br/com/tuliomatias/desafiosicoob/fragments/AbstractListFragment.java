@@ -1,9 +1,11 @@
 package br.com.tuliomatias.desafiosicoob.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +16,19 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
+import br.com.tuliomatias.desafiosicoob.FilmeDetail;
 import br.com.tuliomatias.desafiosicoob.adapters.FilmesAdapter;
 import br.com.tuliomatias.desafiosicoob.models.Filme;
 import br.com.tuliomatias.desafiosicoob.R;
-import br.com.tuliomatias.desafiosicoob.models.MessageEvent;
+import br.com.tuliomatias.desafiosicoob.models.ApiMessageEvent;
+import br.com.tuliomatias.desafiosicoob.models.FilmeMessageEvent;
 import br.com.tuliomatias.desafiosicoob.models.Tmdb;
 import br.com.tuliomatias.desafiosicoob.tmdb.ApiTmdb;
 import br.com.tuliomatias.desafiosicoob.tmdb.IRespostaDaApiTmdb;
 
-public abstract class AbstractListFragment extends android.support.v4.app.Fragment implements IRespostaDaApiTmdb {
+import static android.content.ContentValues.TAG;
+
+public abstract class AbstractListFragment extends android.support.v4.app.Fragment implements IRespostaDaApiTmdb, FilmesAdapter.AdapterViewItemClickListener {
 
     public abstract String getListPath();
     public abstract String titulo();
@@ -49,6 +55,7 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
                         .baseRequestPath(getResources().getString(R.string.base_path))
                         .baseImageRequestPath(getResources().getString(R.string.default_image_path))
                         .imageSize(getResources().getString(R.string.default_image_size))
+                        .regiao(getResources().getString(R.string.regiao))
                         .build(),this);
 
         int qtdColunas = getResources().getInteger(R.integer.qtd_colunas);
@@ -58,6 +65,7 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
         listaView.setHasFixedSize(false);
 
         adapter = new FilmesAdapter(filmes);
+        adapter.setAdapterViewItemClickListener(this);
 
         listaView.setAdapter(adapter);
 
@@ -66,12 +74,6 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
         return v;
     }
 
-    @Override
-    public void respostaDaApi(ArrayList<Filme> filmes) {
-        this.filmes.addAll(filmes);
-//        adapter.notifyDataSetChanged();
-
-    }
 
     @Override
     public String getPathPesquisa() {
@@ -79,24 +81,42 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         EventBus.getDefault().register(this);
     }
 
     @Override
-    public void onStop() {
+    public void onPause() {
+        super.onPause();
         EventBus.getDefault().unregister(this);
-        super.onStop();
+    }
+
+    @Override
+    public void onClick(View v, int position) {
+        Filme f = filmes.get(position);
+        Log.d(TAG, "onItemClick position: " + position+" filme: " + f.getTitulo());
+        Intent intent = new Intent(getActivity(), FilmeDetail.class);
+
+        EventBus.getDefault().postSticky(new FilmeMessageEvent(f));
+        getActivity().startActivity(intent);
+
+    }
+
+    @Override
+    public void onLongClick(View v, int position) {
+        Log.d(TAG, "onItemLongClick position: " + position);
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
-    public void onMessageEvent(final MessageEvent event){
+    public void onMessageEvent(final ApiMessageEvent event){
+
         if(!event.isImageUpdated){
             this.filmes.addAll(event.filmes);
-            adapter.notifyDataSetChanged();
-        }else{
-            adapter.notifyDataSetChanged();
         }
+
+        adapter.notifyDataSetChanged();
+
     }
 }

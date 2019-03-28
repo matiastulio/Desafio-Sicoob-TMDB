@@ -1,8 +1,11 @@
 package br.com.tuliomatias.desafiosicoob.adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,6 +23,8 @@ public class FilmesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
     private ArrayList<Filme> filmes;
+    private static AdapterViewItemClickListener listener;
+
 
     public FilmesAdapter(ArrayList<Filme> filmes) {
         this.filmes = filmes;
@@ -43,6 +48,8 @@ public class FilmesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         filmeHolder.getImagem().setImageBitmap(f.getImage());
         filmeHolder.getTitulo().setText(f.getTitulo());
+
+
     }
 
     @Override
@@ -50,9 +57,11 @@ public class FilmesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return filmes.size();
     }
 
+    public void setAdapterViewItemClickListener(AdapterViewItemClickListener listener){
+        FilmesAdapter.listener = listener;
+    }
 
-
-    public class FilmeHolder extends RecyclerView.ViewHolder{
+    public class FilmeHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         @Getter @Setter(AccessLevel.PROTECTED) TextView titulo;
 
@@ -63,6 +72,24 @@ public class FilmesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             titulo = (TextView) itemView.findViewById(R.id.item_titulo);
             imagem = (ImageView) itemView.findViewById(R.id.item_imagem);
+            imagem.setOnClickListener(this);
+            imagem.setOnLongClickListener(this);
+
         }
+
+        @Override
+        public void onClick(View view) {
+            listener.onClick(view,getAdapterPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            listener.onLongClick(view,getAdapterPosition());
+            return true;
+        }
+    }
+    public interface AdapterViewItemClickListener{
+        public void onClick(View v, int position);
+        public void onLongClick(View v, int position);
     }
 }

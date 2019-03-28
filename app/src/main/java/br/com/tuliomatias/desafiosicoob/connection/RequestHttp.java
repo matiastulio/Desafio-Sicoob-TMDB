@@ -13,7 +13,7 @@ import java.io.IOException;
 
 import br.com.tuliomatias.desafiosicoob.R;
 import br.com.tuliomatias.desafiosicoob.models.Filme;
-import br.com.tuliomatias.desafiosicoob.models.MessageEvent;
+import br.com.tuliomatias.desafiosicoob.models.ApiMessageEvent;
 import br.com.tuliomatias.desafiosicoob.models.Tmdb;
 
 public class RequestHttp implements Callback {
@@ -24,6 +24,7 @@ public class RequestHttp implements Callback {
     private static String PAGE = "page";
     private static String LANGUAGE = "language";
     private static String API_KEY = "api_key";
+    private static String REGION = "region";
 
     public RequestHttp(Tmdb config,ICallbackFromRequest solicitante) {
         this.config = config;
@@ -31,12 +32,13 @@ public class RequestHttp implements Callback {
     }
 
 
-    public void requestUrl(String relativeUrl){
+    public void requestMovies(String relativeUrl){
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(config.getBaseRequestPath()+relativeUrl).newBuilder();
         urlBuilder.addQueryParameter(PAGE,String.valueOf(config.getNumeroPaginaAtual()));
         urlBuilder.addQueryParameter(LANGUAGE,config.getLingua());
         urlBuilder.addQueryParameter(API_KEY,config.getApiKey());
+        urlBuilder.addQueryParameter(REGION,config.getRegiao());
 
         Request request = new Request.Builder().url(urlBuilder.build().toString()).build();
 
@@ -52,7 +54,7 @@ public class RequestHttp implements Callback {
                     .placeholder(R.drawable.placeholder)
                     .error(R.drawable.error)
                     .get());
-            EventBus.getDefault().post(new MessageEvent(true,null));
+            EventBus.getDefault().post(new ApiMessageEvent(true,null));
         } catch (IOException e) {
             e.printStackTrace();
         }
