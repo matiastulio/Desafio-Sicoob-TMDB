@@ -24,7 +24,7 @@ public class ApiTmdb implements IApiTmdb, ICallbackFromRequest {
 
     public ApiTmdb(Tmdb config,IRespostaDaApiTmdb solicitante) {
         this.config = config;
-        carregador = new RequestHttp(config,this);
+        carregador = new RequestHttp(this);
         this.solicitante = solicitante;
     }
 
@@ -35,12 +35,12 @@ public class ApiTmdb implements IApiTmdb, ICallbackFromRequest {
 
     @Override
     public void getImageFromPath(Filme f) {
-        carregador.requestImage(f);
+        carregador.requestImage(config, f);
     }
 
     @Override
     public void getFilme(int filmeId) {
-        carregador.requestMovie(filmeId);
+        carregador.requestMovie(config, filmeId);
     }
 
     @Override
@@ -66,6 +66,6 @@ public class ApiTmdb implements IApiTmdb, ICallbackFromRequest {
     }
 
     private void getListaFromPath(String relativeUrl){
-        carregador.requestMovies(relativeUrl);
+        carregador.requestMovies(config, relativeUrl);
     }
 }

@@ -18,7 +18,6 @@ import br.com.tuliomatias.desafiosicoob.models.Tmdb;
 
 public class RequestHttp implements Callback {
 
-    private Tmdb config;
     private ICallbackFromRequest solicitante;
 
     private static String PAGE = "page";
@@ -26,13 +25,12 @@ public class RequestHttp implements Callback {
     private static String API_KEY = "api_key";
     private static String REGION = "region";
 
-    public RequestHttp(Tmdb config,ICallbackFromRequest solicitante) {
-        this.config = config;
+    public RequestHttp(ICallbackFromRequest solicitante) {
         this.solicitante = solicitante;
     }
 
 
-    public void requestMovies(String relativeUrl){
+    public void requestMovies(Tmdb config, String relativeUrl){
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(config.getBaseRequestPath()+relativeUrl).newBuilder();
         urlBuilder.addQueryParameter(PAGE,String.valueOf(config.getNumeroPaginaAtual()));
@@ -47,7 +45,7 @@ public class RequestHttp implements Callback {
 
     }
 
-    public void requestImage(Filme f){
+    public void requestImage(Tmdb config, Filme f){
         try {
             f.setImage(Picasso.get()
                     .load(config.getBaseImageRequestPath()+config.getImageSize()+f.getImagePath())
@@ -60,7 +58,7 @@ public class RequestHttp implements Callback {
         }
     }
 
-    public void requestMovie(int filmeId){
+    public void requestMovie(Tmdb config, int filmeId){
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(config.getBaseRequestPath()+filmeId).newBuilder();
         urlBuilder.addQueryParameter(API_KEY,config.getApiKey());
@@ -82,7 +80,6 @@ public class RequestHttp implements Callback {
         if (!response.isSuccessful()) {
             throw new IOException("Unexpected code " + response);
         } else {
-            config.setNumeroPaginaAtual(config.getNumeroPaginaAtual()+1);
             solicitante.onResponseOkFromCall(response.body().string());
         }
     }

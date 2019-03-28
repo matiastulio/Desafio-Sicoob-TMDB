@@ -21,7 +21,6 @@ import br.com.tuliomatias.desafiosicoob.adapters.FilmesAdapter;
 import br.com.tuliomatias.desafiosicoob.models.Filme;
 import br.com.tuliomatias.desafiosicoob.R;
 import br.com.tuliomatias.desafiosicoob.models.ApiMessageEvent;
-import br.com.tuliomatias.desafiosicoob.models.FilmeMessageEvent;
 import br.com.tuliomatias.desafiosicoob.models.Tmdb;
 import br.com.tuliomatias.desafiosicoob.tmdb.ApiTmdb;
 import br.com.tuliomatias.desafiosicoob.tmdb.IRespostaDaApiTmdb;
@@ -36,8 +35,10 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
     protected ArrayList<Filme> filmes;
 
     protected RecyclerView listaView;
+    private GridLayoutManager layoutManager;
     protected FilmesAdapter adapter;
     protected ApiTmdb api;
+    private boolean isLoading = false;
 
 
     @Nullable
@@ -61,7 +62,9 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
         int qtdColunas = getResources().getInteger(R.integer.qtd_colunas);
 
         listaView = (RecyclerView) v.findViewById(R.id.lista_filmes);
-        listaView.setLayoutManager(new GridLayoutManager(getActivity(), qtdColunas));
+        layoutManager = new GridLayoutManager(getActivity(), qtdColunas);
+        listaView.setLayoutManager(layoutManager);
+        listaView.addOnScrollListener(getRVOnScrollListener());
         listaView.setHasFixedSize(false);
 
         adapter = new FilmesAdapter(filmes);
@@ -109,11 +112,27 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
 
     }
 
+    private RecyclerView.OnScrollListener getRVOnScrollListener(){
+        return new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItems = layoutManager.getItemCount();
+                int lastPosition = layoutManager.findLastVisibleItemPosition();
+                if(!isLoading && totalItems <= (lastPosition + 6)){
+                    isLoading = true;
+                    api.getFilmes();
+                }
+            }
+        };
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
     public void onMessageEvent(final ApiMessageEvent event){
 
         if(!event.isImageUpdated){
             this.filmes.addAll(event.filmes);
+            isLoading = false;
         }
 
         adapter.notifyDataSetChanged();
