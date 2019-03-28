@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single" >
+
+        <item android:id="@+id/drawer_popular"
+            android:title="@string/popular"
+            android:icon="@mipmap/popular"
+            android:checked="true"/>
+
+        <item android:id="@+id/drawer_nos_cinemas"
+            android:title="@string/nos_cinemas"
+            android:icon="@mipmap/cinema"/>
+
+        <item android:id="@+id/drawer_futuros"
+            android:title="@string/futuros"
+            android:icon="@mipmap/future"/>
+
+        <item android:id="@+id/drawer_favoritos"
+            android:title="@string/favoritos"
+            android:icon="@mipmap/favoritos"/>
+
+        <item android:id="@+id/drawer_sobre"
+            android:title="@string/sobreApp"
+            android:icon="@mipmap/information"/>
+
+    </group>
+
+
+</menu>
